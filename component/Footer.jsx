@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer id="contact">
+    <footer id="footer">
       <div className="footer-content">
         <div className="footer-col">
           <h4>Contact</h4>
@@ -10,7 +10,7 @@ function Footer() {
         <div className="footer-col">
           <h4>Connect</h4>
           <p><a href="https://linkedin.com/in/viraj-shah-v1492006" target="_blank" rel="noreferrer">LinkedIn</a></p>
-          <p><a href="https://github.com/Virajshah149" target="_blank" rel="noreferrer">GitHub</a></p>
+          <p><a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a></p>
         </div>
         <div className="footer-col">
           <h4>Location</h4>
@@ -22,7 +22,7 @@ function Footer() {
         <p>© 2025 Viraj Jayant Shah. Crafted with precision and creativity.</p>
       </div>
     </footer>
-  );
+  )
 }
 
-export default Footer;
+export default Footer

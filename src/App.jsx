@@ -1,71 +1,42 @@
-import { useEffect, useState } from "react";
-import Navbar from "../component/Navbar";
-import Header from "../component/Header";
-import About from "../component/About";
-import Skills from "../component/Skills";
-import Experience from "../component/Experience";
-import Projects from "../component/Projects";
-import Footer from "../component/Footer";
-import "./App.css";
-
-const sections = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "contact", label: "Contact" },
-];
+import { useState, useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import Navbar from '../component/Navbar'
+import Footer from '../component/Footer'
+import Home from '../pages/Home'
+import Projects from '../pages/Projects'
+import Contact from '../pages/Contact'
+import NotFound from '../pages/NotFound'
+import './App.css'
 
 function App() {
-  const [activeSection, setActiveSection] = useState("home");
+  const [darkMode, setDarkMode] = useState(true)
+  const location = useLocation()
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
-    sections.forEach((s) => {
-      const el = document.getElementById(s.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const handleNavigate = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const toggleDarkMode = () => setDarkMode(!darkMode)
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? '' : 'light-mode'}`}>
       <div className="bg-shapes">
         <div className="diagonal diagonal-1"></div>
         <div className="diagonal diagonal-2"></div>
       </div>
-      <Navbar 
-        sections={sections} 
-        activeSection={activeSection} 
-        onNavigate={handleNavigate} 
-      />
-      <Header />
-      <About />
-      <Experience />
-      <Skills />
-      <Projects />
+
+      <Navbar onToggleDarkMode={toggleDarkMode} isDarkMode={darkMode} />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
       <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
