@@ -1,12 +1,52 @@
 import { useState, useEffect, useRef } from 'react'
 
+function Spinner() {
+  return (
+    <div className="spinner-wrapper">
+      <div className="spinner"></div>
+      <p>Loading repositories...</p>
+    </div>
+  )
+}
+
+function ErrorMessage({ message, onRetry }) {
+  return (
+    <div className="error-box">
+      <p className="error-text">⚠ Failed to load repositories: {message}</p>
+      <button className="retry-btn" onClick={onRetry}>Retry</button>
+    </div>
+  )
+}
+
 function Projects() {
   const [filter, setFilter] = useState('all')
   const [visible, setVisible] = useState(false)
   const ref = useRef(null)
 
+  // --- GitHub API state (Practical 3) ---
+  const [repos, setRepos] = useState([])
+  const [repoLoading, setRepoLoading] = useState(true)
+  const [repoError, setRepoError] = useState(null)
+  const [repoSearch, setRepoSearch] = useState('')
+
+  const GITHUB_USERNAME = "Virajshah149" // replace with your actual GitHub username
+
+  const fetchRepos = () => {
+    setRepoLoading(true)
+    setRepoError(null)
+    fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Status ${res.status}`)
+        return res.json()
+      })
+      .then((data) => setRepos(data))
+      .catch((err) => setRepoError(err.message))
+      .finally(() => setRepoLoading(false))
+  }
+
   useEffect(() => {
     setVisible(true)
+    fetchRepos()
   }, [])
 
   const projects = [
@@ -59,6 +99,10 @@ function Projects() {
     ? projects
     : projects.filter((p) => p.category === filter)
 
+  const filteredRepos = repos.filter((repo) =>
+    repo.name.toLowerCase().includes(repoSearch.toLowerCase())
+  )
+
   return (
     <section ref={ref} className={`section-container page-section reveal ${visible ? 'visible' : ''}`}>
       <div className="section-header">
@@ -95,6 +139,46 @@ function Projects() {
 
       {filteredProjects.length === 0 && (
         <p className="empty-state">No projects in this category yet.</p>
+      )}
+
+      {/* --- Practical 3: Live GitHub Repositories --- */}
+      <div className="section-header repo-section-header">
+        <div className="accent-line"></div>
+        <h2>GitHub Repositories</h2>
+        <p>Live data pulled directly from the GitHub API</p>
+      </div>
+
+      {repoLoading && <Spinner />}
+      {!repoLoading && repoError && (
+        <ErrorMessage message={repoError} onRetry={fetchRepos} />
+      )}
+
+      {!repoLoading && !repoError && (
+        <>
+          <input
+            type="text"
+            className="repo-search"
+            placeholder="Search repositories..."
+            value={repoSearch}
+            onChange={(e) => setRepoSearch(e.target.value)}
+          />
+
+          <div className="repo-grid">
+            {filteredRepos.length === 0 && <p className="empty-state">No repositories found.</p>}
+            {filteredRepos.map((repo) => (
+              <div className="repo-card" key={repo.id}>
+                <h4>{repo.name}</h4>
+                <p className="desc">{repo.description || "No description provided."}</p>
+                <div className="repo-meta">
+                  <span className="repo-stars">⭐ {repo.stargazers_count}</span>
+                  <a href={repo.html_url} target="_blank" rel="noreferrer" className="repo-link">
+                    View Repo →
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </section>
   )

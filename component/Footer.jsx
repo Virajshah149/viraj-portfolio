@@ -1,25 +1,20 @@
+import { Link } from 'react-router-dom'
+
 function Footer() {
   return (
     <footer id="footer">
-      <div className="footer-content">
-        <div className="footer-col">
-          <h4>Contact</h4>
-          <p><a href="mailto:virajshah149@gmail.com">virajshah149@gmail.com</a></p>
-          <p><a href="tel:+917990589563">+91 7990589563</a></p>
-        </div>
-        <div className="footer-col">
-          <h4>Connect</h4>
-          <p><a href="https://linkedin.com/in/viraj-shah-v1492006" target="_blank" rel="noreferrer">LinkedIn</a></p>
-          <p><a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a></p>
-        </div>
-        <div className="footer-col">
-          <h4>Location</h4>
-          <p>Vadodara, Gujarat</p>
-          <p>India</p>
-        </div>
+      <nav className="footer-nav">
+        <Link to="/">Home</Link>
+        <Link to="/projects">Projects</Link>
+        <Link to="/contact">Contact</Link>
+      </nav>
+      <div className="footer-socials">
+        <a href="https://linkedin.com/in/viraj-shah-v1492006" target="_blank" rel="noreferrer" title="LinkedIn">in</a>
+        <a href="https://github.com/" target="_blank" rel="noreferrer" title="GitHub">GH</a>
+        <a href="mailto:virajshah149@gmail.com" title="Email">@</a>
       </div>
       <div className="footer-bottom">
-        <p>© 2025 Viraj Jayant Shah. Crafted with precision and creativity.</p>
+        <p>© 2025 Viraj Jayant Shah · Built with React</p>
       </div>
     </footer>
   )

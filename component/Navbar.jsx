@@ -19,26 +19,26 @@ function Navbar({ onToggleDarkMode, isDarkMode }) {
 
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-      <Link to="/" className="logo">VP</Link>
+      <h1 className="logo">Welcome to My Portfolio</h1>
       <ul className="nav-links">
         {links.map((link) => (
           <li key={link.path}>
-            <Link
-              to={link.path}
-              className={location.pathname === link.path ? 'active' : ''}
-            >
+            <Link to={link.path} className={location.pathname === link.path ? 'active' : ''}>
               {link.label}
             </Link>
           </li>
         ))}
       </ul>
-      <button
-        className="theme-toggle"
-        onClick={onToggleDarkMode}
-        title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-      >
-        {isDarkMode ? '☀️' : '🌙'}
-      </button>
+      <div className="nav-right">
+        <button
+          className="theme-toggle"
+          onClick={onToggleDarkMode}
+          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {isDarkMode ? '☀️' : '🌙'}
+        </button>
+        <Link to="/contact" className="nav-cta">Let's Talk</Link>
+      </div>
     </nav>
   )
 }
